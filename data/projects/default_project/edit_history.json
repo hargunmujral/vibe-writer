@@ -1,0 +1,197 @@
+{
+  "edits": [
+    {
+      "timestamp": "2025-04-08T22:08:18.220397",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 0,
+        "new_length": 5,
+        "change_size": 5,
+        "similarity": 0.0
+      },
+      "location": {
+        "cursor_position": 5
+      },
+      "context": {
+        "before": "",
+        "after": "dafsa"
+      }
+    },
+    {
+      "timestamp": "2025-04-08T22:07:22.474459",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 28,
+        "new_length": 29,
+        "change_size": 1,
+        "similarity": 0.9824561403508771
+      },
+      "location": {
+        "cursor_position": 29
+      },
+      "context": {
+        "before": "Hi this is an editor jjjjj j",
+        "after": "Hi this is an editor jjjjj j "
+      }
+    },
+    {
+      "timestamp": "2025-04-08T22:07:17.823618",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 27,
+        "new_length": 28,
+        "change_size": 1,
+        "similarity": 0.9818181818181818
+      },
+      "location": {
+        "cursor_position": 28
+      },
+      "context": {
+        "before": "Hi this is an editor jjjjj ",
+        "after": "Hi this is an editor jjjjj j"
+      }
+    },
+    {
+      "timestamp": "2025-04-08T22:07:10.357911",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 26,
+        "new_length": 27,
+        "change_size": 1,
+        "similarity": 0.9811320754716981
+      },
+      "location": {
+        "cursor_position": 27
+      },
+      "context": {
+        "before": "Hi this is an editor jjjjj",
+        "after": "Hi this is an editor jjjjj "
+      }
+    },
+    {
+      "timestamp": "2025-04-08T22:06:57.567416",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 21,
+        "new_length": 26,
+        "change_size": 5,
+        "similarity": 0.8936170212765957
+      },
+      "location": {
+        "cursor_position": 26
+      },
+      "context": {
+        "before": "Hi this is an editor ",
+        "after": "Hi this is an editor jjjjj"
+      }
+    },
+    {
+      "timestamp": "2025-04-08T21:15:02.987228",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 20,
+        "new_length": 21,
+        "change_size": 1,
+        "similarity": 0.975609756097561
+      },
+      "location": {
+        "cursor_position": 21
+      },
+      "context": {
+        "before": "Hi this is an editor",
+        "after": "Hi this is an editor "
+      }
+    },
+    {
+      "timestamp": "2025-04-08T21:14:53.216221",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 11,
+        "new_length": 20,
+        "change_size": 9,
+        "similarity": 0.7096774193548387
+      },
+      "location": {
+        "cursor_position": 20
+      },
+      "context": {
+        "before": "Hi this is ",
+        "after": "Hi this is an editor"
+      }
+    },
+    {
+      "timestamp": "2025-04-08T21:14:48.055475",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 10,
+        "new_length": 11,
+        "change_size": 1,
+        "similarity": 0.9523809523809523
+      },
+      "location": {
+        "cursor_position": 11
+      },
+      "context": {
+        "before": "Hi this is",
+        "after": "Hi this is "
+      }
+    },
+    {
+      "timestamp": "2025-04-08T21:14:43.414299",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 9,
+        "new_length": 10,
+        "change_size": 1,
+        "similarity": 0.9473684210526315
+      },
+      "location": {
+        "cursor_position": 10
+      },
+      "context": {
+        "before": "Hi this i",
+        "after": "Hi this is"
+      }
+    },
+    {
+      "timestamp": "2025-04-08T21:14:40.459035",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 1,
+        "new_length": 9,
+        "change_size": 8,
+        "similarity": 0.2
+      },
+      "location": {
+        "cursor_position": 9
+      },
+      "context": {
+        "before": "H",
+        "after": "Hi this i"
+      }
+    },
+    {
+      "timestamp": "2025-04-08T21:14:35.397131",
+      "edit_type": "text_change",
+      "diff": {
+        "old_length": 0,
+        "new_length": 1,
+        "change_size": 1,
+        "similarity": 0.0
+      },
+      "location": {
+        "cursor_position": 1
+      },
+      "context": {
+        "before": "",
+        "after": "H"
+      }
+    }
+  ],
+  "deletions": [],
+  "metadata": {
+    "project_name": "default_project",
+    "created_at": "2025-04-08T21:05:44.985851",
+    "last_updated": "2025-04-08T22:08:18.220445"
+  }
+}

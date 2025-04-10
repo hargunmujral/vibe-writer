@@ -1,0 +1,28 @@
+{
+  "app": {
+    "name": "Vibe Writer",
+    "version": "0.1.0",
+    "theme": "dark"
+  },
+  "editor": {
+    "font_size": 14,
+    "tab_size": 4,
+    "word_wrap": true,
+    "auto_save": true,
+    "auto_save_interval": 60
+  },
+  "ai": {
+    "enabled": true,
+    "creativity": 0.7,
+    "default_model": "gpt-4",
+    "features": {
+      "autocomplete": true,
+      "style_consistency": true,
+      "reference_suggestions": true
+    }
+  },
+  "storage": {
+    "projects_dir": "data/projects",
+    "user_data_dir": "data/user_data"
+  }
+}
