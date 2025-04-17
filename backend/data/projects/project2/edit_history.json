@@ -1,6 +1,21 @@
 {
   "edits": [
     {
+      "timestamp": "2025-04-16T20:55:55.826764",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 141,
+        "change_ratio": 0.14545454545454545
+      },
+      "location": {
+        "cursor_position": 14
+      },
+      "context": {
+        "before": "what is this",
+        "after": "what is this\n\n\n\n### this is something\n\n\n\n\n\n\n# This is something else \n\n## This is the last thing\n\n\n\n"
+      }
+    },
+    {
       "timestamp": "2025-04-16T20:44:56.548325",
       "edit_type": "text_change",
       "diff": {
@@ -20,6 +35,6 @@
   "metadata": {
     "project_name": "project2",
     "created_at": "2025-04-16T20:44:43.999027",
-    "last_updated": "2025-04-16T20:44:56.548333"
+    "last_updated": "2025-04-16T20:55:55.827049"
   }
 }
