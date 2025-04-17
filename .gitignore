@@ -16,9 +16,11 @@ lib64/
 parts/
 sdist/
 var/
+wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
 # Virtual Environment
 venv/
@@ -37,4 +39,20 @@ Thumbs.db
 
 # App specific
 data/user_data/
-.streamlit/secrets.toml 
+.streamlit/secrets.toml
+
+# JavaScript/Node.js
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+.next/
+out/
+.cache/
+*.tsbuildinfo
+
+# Project specific
+data/projects/
+*.log
+.coverage
+htmlcov/ 

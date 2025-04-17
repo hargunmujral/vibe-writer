@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 255, 255, 255;
+  --background-start-rgb: 13, 17, 23;
+  --background-end-rgb: 17, 24, 39;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+/* Monaco editor custom styling */
+.monaco-editor {
+  font-size: 14px !important;
+  line-height: 22px !important;
+}
+
+/* Dark theme adjustments */
+.monaco-editor .monaco-scrollable-element {
+  background-color: #1e1e1e !important;
+}
+
+/* Tab styling */
+.tab {
+  @apply py-2 px-4 cursor-pointer border-b-2 border-transparent;
+}
+
+.tab.active {
+  @apply border-blue-500 text-blue-400 font-semibold;
+}
+
+.tab:hover:not(.active) {
+  @apply border-gray-600 text-gray-300;
+} 

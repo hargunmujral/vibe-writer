@@ -1,0 +1,25 @@
+{
+  "edits": [
+    {
+      "timestamp": "2025-04-16T20:44:56.548325",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 12,
+        "change_ratio": 0.0
+      },
+      "location": {
+        "cursor_position": 13
+      },
+      "context": {
+        "before": "",
+        "after": "what is this"
+      }
+    }
+  ],
+  "deletions": [],
+  "metadata": {
+    "project_name": "project2",
+    "created_at": "2025-04-16T20:44:43.999027",
+    "last_updated": "2025-04-16T20:44:56.548333"
+  }
+}

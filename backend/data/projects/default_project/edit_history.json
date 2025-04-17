@@ -1,0 +1,235 @@
+{
+  "edits": [
+    {
+      "timestamp": "2025-04-16T19:53:35.004508",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 36,
+        "change_ratio": 0.3076923076923077
+      },
+      "location": {
+        "cursor_position": 16
+      },
+      "context": {
+        "before": "dsfsdfas",
+        "after": "dsfsdfasz\n\n\n### HELLO\n\n\nsdfas\n\n\n- okay\n- why"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:53:14.044211",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": -140,
+        "change_ratio": 0.08974358974358974
+      },
+      "location": {
+        "cursor_position": 9
+      },
+      "context": {
+        "before": "hisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we use monaco for this\n\nd\n\n\ndddfjasd;lfdjslka;dafds",
+        "after": "dsfsdfas"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:52:52.873916",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 5,
+        "change_ratio": 0.9828178694158075
+      },
+      "location": {
+        "cursor_position": 38
+      },
+      "context": {
+        "before": " of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we use monaco for this\n\nd\n\n\ndddfjasd;lfdjslka;",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we "
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:52:45.946085",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 0,
+        "change_ratio": 1.0
+      },
+      "location": {
+        "cursor_position": 33
+      },
+      "context": {
+        "before": " of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we use monaco for this\n\nd\n\n\ndddfjasd;lfdjslka;",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we "
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:52:44.675022",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 21,
+        "change_ratio": 0.9207547169811321
+      },
+      "location": {
+        "cursor_position": 33
+      },
+      "context": {
+        "before": "kay what is the point of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we use monaco for this\n\nd",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we "
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:52:40.977643",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 0,
+        "change_ratio": 1.0
+      },
+      "location": {
+        "cursor_position": 5
+      },
+      "context": {
+        "before": "kay what is the point of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we use monaco for this\n\nd",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we "
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:48:23.751904",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 9,
+        "change_ratio": 0.9617021276595744
+      },
+      "location": {
+        "cursor_position": 19
+      },
+      "context": {
+        "before": " thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\nWhy do we use monaco for this\n\nd",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\njjjjjjjjjWhy do we "
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:39:49.933267",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 1,
+        "change_ratio": 0.9955555555555555
+      },
+      "location": {
+        "cursor_position": 13
+      },
+      "context": {
+        "before": "s thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\nWhy do we use monaco for this\n\n",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\nWhy do we use monac"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:39:31.512881",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 9,
+        "change_ratio": 0.958139534883721
+      },
+      "location": {
+        "cursor_position": 39
+      },
+      "context": {
+        "before": "lo what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\nWhy do we use monaco\n\n",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\nWhy do we use monac"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:39:27.566032",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 23,
+        "change_ratio": 0.8743169398907104
+      },
+      "location": {
+        "cursor_position": 30
+      },
+      "context": {
+        "before": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n\nWhy do we use monac"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:16:47.029323",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": -5,
+        "change_ratio": 0.9696969696969697
+      },
+      "location": {
+        "cursor_position": 9
+      },
+      "context": {
+        "before": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\nokay ",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\n"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:16:36.494303",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 29,
+        "change_ratio": 0.7943262411347518
+      },
+      "location": {
+        "cursor_position": 14
+      },
+      "context": {
+        "before": "hello what is thia\n\n\nokay what is the point of thisddddd",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd\n\n\n### Render markdown\n\nokay "
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:16:15.051574",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 5,
+        "change_ratio": 0.9532710280373832
+      },
+      "location": {
+        "cursor_position": 39
+      },
+      "context": {
+        "before": "hello what is thia\n\n\nokay what is the point of this",
+        "after": "hello what is thia\n\n\nokay what is the point of thisddddd"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:16:10.464161",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 33,
+        "change_ratio": 0.5217391304347826
+      },
+      "location": {
+        "cursor_position": 3
+      },
+      "context": {
+        "before": "hello what is thia",
+        "after": "hello what is thia\n\n\nokay what is the point of this"
+      }
+    },
+    {
+      "timestamp": "2025-04-16T19:15:44.428409",
+      "edit_type": "text_change",
+      "diff": {
+        "change_size": 18,
+        "change_ratio": 0.0
+      },
+      "location": {
+        "cursor_position": 19
+      },
+      "context": {
+        "before": "",
+        "after": "hello what is thia"
+      }
+    }
+  ],
+  "deletions": [],
+  "metadata": {
+    "project_name": "default_project",
+    "created_at": "2025-04-16T19:15:36.063639",
+    "last_updated": "2025-04-16T19:53:35.004526"
+  }
+}
