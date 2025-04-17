@@ -46,9 +46,16 @@ const Editor: React.FC<EditorProps> = ({
   const [showOutline, setShowOutline] = useState<boolean>(true);
   const [headers, setHeaders] = useState<{ level: number; text: string; position: number }[]>([]);
   const [exportMenuOpen, setExportMenuOpen] = useState<boolean>(false);
+  const [isAutocompleting, setIsAutocompleting] = useState<boolean>(false);
+  const [autocompleteInProgress, setAutocompleteInProgress] = useState<boolean>(false);
+  const [autocompleteSuggestion, setAutocompleteSuggestion] = useState<string | null>(null);
+  const [suggestionsVisible, setSuggestionsVisible] = useState<boolean>(false);
 
   const editorRef = useRef<editor.IStandaloneCodeEditor | null>(null);
   const previousContentRef = useRef<string>(initialContent);
+  const idleTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const lastCursorPositionRef = useRef<editor.IPosition | null>(null);
+  const currentSuggestionPositionRef = useRef<editor.IPosition | null>(null);
 
   // extract headers for outline
   useEffect(() => {
@@ -260,8 +267,260 @@ blockquote{margin:.75em 0;padding-left:1em;border-left:3px solid #ccc}
     </div>
   );
 
+  // Get context before cursor
+  const getContextBeforeCursor = () => {
+    if (!editorRef.current) return { previous: "", current: "" };
+    
+    const model = editorRef.current.getModel();
+    const position = editorRef.current.getPosition();
+    
+    if (!model || !position) return { previous: "", current: "" };
+    
+    const lines = model.getLinesContent();
+    const currentLine = lines[position.lineNumber - 1];
+    const textBeforeCursor = currentLine.substring(0, position.column - 1);
+    
+    // Get previous context (up to 1000 chars)
+    let previousContext = "";
+    let lineIndex = position.lineNumber - 1;
+    let charCount = 0;
+    
+    // Start with text before cursor on current line
+    previousContext = textBeforeCursor;
+    charCount += textBeforeCursor.length;
+    
+    // Add previous lines until we reach 1000 chars
+    while (lineIndex > 0 && charCount < 1000) {
+      lineIndex--;
+      previousContext = lines[lineIndex] + "\n" + previousContext;
+      charCount += lines[lineIndex].length + 1;
+    }
+    
+    // Trim to 1000 chars if needed
+    if (previousContext.length > 1000) {
+      previousContext = previousContext.substring(previousContext.length - 1000);
+    }
+    
+    return {
+      previous: previousContext,
+      current: textBeforeCursor
+    };
+  };
+  
+  // Apply suggestion to editor
+  const applySuggestion = () => {
+    if (!autocompleteSuggestion || !editorRef.current || !currentSuggestionPositionRef.current) {
+      return;
+    }
+    
+    const editor = editorRef.current;
+    const position = currentSuggestionPositionRef.current;
+    
+    editor.executeEdits("autocomplete", [
+      {
+        range: {
+          startLineNumber: position.lineNumber,
+          startColumn: position.column,
+          endLineNumber: position.lineNumber,
+          endColumn: position.column
+        },
+        text: autocompleteSuggestion
+      }
+    ]);
+    
+    // Clear suggestion after applying
+    setAutocompleteSuggestion(null);
+    setSuggestionsVisible(false);
+    
+    // Focus back on editor
+    editor.focus();
+  };
+  
+  // Fetch autocomplete suggestion
+  const fetchAutocompleteSuggestion = async () => {
+    // Don't fetch if already showing suggestions or processing a request
+    if (autocompleteInProgress || suggestionsVisible || !projectName) {
+      console.log("Skipping autocomplete: already in progress, visible, or missing project name");
+      return;
+    }
+    
+    const { previous, current } = getContextBeforeCursor();
+    if (!current.trim()) {
+      console.log("Skipping autocomplete: no text before cursor");
+      return;
+    }
+    
+    console.log("Fetching autocomplete suggestion");
+    setAutocompleteInProgress(true);
+    
+    try {
+      const response = await fetch("http://localhost:8000/autocomplete", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          memory: "", // Will implement later
+          recent_edits: [], // Could fetch from history API
+          previous_context: previous,
+          current_snippet: current,
+          project_name: projectName
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok) {
+        console.error("Autocomplete API error:", data.detail || "Unknown error");
+        if (response.status === 500) {
+          console.error("Server stacktrace:", data.detail);
+        }
+        return;
+      }
+      
+      if (data.completion) {
+        // Store the suggestion and current cursor position
+        setAutocompleteSuggestion(data.completion);
+        setSuggestionsVisible(true);
+        currentSuggestionPositionRef.current = editorRef.current?.getPosition() || null;
+      }
+    } catch (err) {
+      console.error("Autocomplete error:", err);
+    } finally {
+      setAutocompleteInProgress(false);
+    }
+  };
+  
+  // Monitor typing and setup idle timer
+  useEffect(() => {
+    if (!editorRef.current) return;
+    
+    // Listen for content changes (actual typing)
+    const modelChangeDisposable = editorRef.current.onDidChangeModelContent(() => {
+      // User is typing - clear any existing suggestions
+      if (suggestionsVisible) {
+        setSuggestionsVisible(false);
+        setAutocompleteSuggestion(null);
+      }
+      
+      // Reset and restart the idle timer
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+      }
+      
+      // Set new timer for 5 seconds of inactivity
+      idleTimerRef.current = setTimeout(() => {
+        console.log("Idle timer triggered - fetching suggestion");
+        fetchAutocompleteSuggestion();
+      }, 5000);
+    });
+    
+    // Listen for cursor position changes (to hide suggestions)
+    const cursorDisposable = editorRef.current.onDidChangeCursorPosition(() => {
+      if (suggestionsVisible) {
+        setSuggestionsVisible(false);
+        setAutocompleteSuggestion(null);
+      }
+    });
+    
+    return () => {
+      modelChangeDisposable.dispose();
+      cursorDisposable.dispose();
+      
+      if (idleTimerRef.current) {
+        clearTimeout(idleTimerRef.current);
+      }
+    };
+  }, [editorRef.current, projectName, suggestionsVisible]);
+  
+  // Alternative fix for Tab key handling
+  useEffect(() => {
+    if (!editorRef.current) return;
+    
+    const editorInstance = editorRef.current;
+    const domNode = editorInstance.getDomNode();
+    
+    if (!domNode) return;
+    
+    // Function to handle keydown events
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Tab' && suggestionsVisible && autocompleteSuggestion) {
+        e.preventDefault();
+        e.stopPropagation();
+        applySuggestion();
+      }
+    };
+    
+    // Add the event listener to the editor's DOM node
+    domNode.addEventListener('keydown', handleKeyDown, true); // true for capture phase
+    
+    return () => {
+      domNode.removeEventListener('keydown', handleKeyDown, true);
+    };
+  }, [editorRef.current, suggestionsVisible, autocompleteSuggestion]);
+  
+  // Manually trigger autocomplete with button
+  const manualTriggerAutocomplete = () => {
+    if (!suggestionsVisible) {
+      fetchAutocompleteSuggestion();
+    }
+  };
+
+  // Render the suggestion box
+  const renderSuggestionBox = () => {
+    if (!suggestionsVisible || !autocompleteSuggestion) {
+      return null;
+    }
+    
+    return (
+      <div className="suggestion-box fixed p-3 bg-gray-800 text-white rounded shadow-lg border border-gray-600 z-50 max-w-md">
+        <div className="flex justify-between items-center mb-2">
+          <span className="text-xs text-gray-400">Suggestion</span>
+          <button 
+            onClick={() => setSuggestionsVisible(false)}
+            className="text-gray-400 hover:text-white text-xs"
+          >
+            ✕
+          </button>
+        </div>
+        <div className="suggestion-text mb-2 text-sm">
+          <span className="text-gray-400">...</span>
+          <span className="text-blue-400">{autocompleteSuggestion}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-xs text-gray-400">Press Tab to accept</span>
+          <button 
+            onClick={applySuggestion}
+            className="bg-blue-600 hover:bg-blue-700 text-xs text-white py-1 px-2 rounded"
+          >
+            Accept
+          </button>
+        </div>
+      </div>
+    );
+  };
+
+  // Add CSS for positioning the suggestion box
+  useEffect(() => {
+    if (suggestionsVisible && editorRef.current && currentSuggestionPositionRef.current) {
+      const position = currentSuggestionPositionRef.current;
+      const coordinates = editorRef.current.getScrolledVisiblePosition(position);
+      
+      if (coordinates) {
+        const suggestionBox = document.querySelector('.suggestion-box') as HTMLElement;
+        if (suggestionBox) {
+          // Get editor container position
+          const editorContainer = editorRef.current.getDomNode();
+          if (editorContainer) {
+            const rect = editorContainer.getBoundingClientRect();
+            suggestionBox.style.top = `${rect.top + coordinates.top + 20}px`;
+            suggestionBox.style.left = `${rect.left + coordinates.left}px`;
+          }
+        }
+      }
+    }
+  }, [suggestionsVisible, editorRef.current]);
+
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col relative">
       {error && (
         <div className="bg-red-500 text-white p-2 mb-2 rounded flex justify-between">
           <span>{error}</span>
@@ -397,6 +656,9 @@ blockquote{margin:.75em 0;padding-left:1em;border-left:3px solid #ccc}
         )}
       </div>
 
+      {/* Render suggestion box */}
+      {renderSuggestionBox()}
+
       {/* footer */}
       <div className="mt-4 flex justify-between">
         <button
@@ -406,14 +668,25 @@ blockquote{margin:.75em 0;padding-left:1em;border-left:3px solid #ccc}
           Save
         </button>
         <button
-          onClick={() => alert("AI Assist coming soon!")}
-          className="bg-gray-600 hover:bg-gray-700 text-white py-2 px-4 rounded"
+          onClick={manualTriggerAutocomplete}
+          className={`${
+            autocompleteInProgress ? "bg-gray-500" : "bg-gray-600 hover:bg-gray-700"
+          } text-white py-2 px-4 rounded`}
+          disabled={autocompleteInProgress}
         >
-          AI Assist
+          {autocompleteInProgress ? "Thinking..." : "Suggest Completion"}
         </button>
       </div>
     </div>
   );
 };
+
+// Add this CSS to your global styles
+const globalStyles = `
+  .suggestion-box {
+    max-width: 300px;
+    font-family: monospace;
+  }
+`;
 
 export default Editor;

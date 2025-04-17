@@ -7,11 +7,24 @@ import os
 import json
 from datetime import datetime
 from pathlib import Path
+import openai
+from dotenv import load_dotenv
 
 from utils.edit_history import EditHistory
 from utils.config import load_config
 
 app = FastAPI(title="Vibe Writer API", description="Backend API for Vibe Writer application")
+
+# Load environment variables
+load_dotenv()
+
+# Configure OpenAI client
+# Initialize OpenAI client
+try:
+    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+except Exception as e:
+    print(f"Error initializing OpenAI client: {e}")
+    client = None
 
 # Configure CORS
 app.add_middleware(
@@ -40,6 +53,16 @@ class ProjectInfo(BaseModel):
 class DeletedTextInfo(BaseModel):
     deleted_text: str
     project_name: str
+
+class AutocompleteRequest(BaseModel):
+    memory: str
+    recent_edits: List[Dict[str, Any]]
+    previous_context: str
+    current_snippet: str
+    project_name: str
+
+class AutocompleteResponse(BaseModel):
+    completion: str
 
 # Helper functions
 def get_edit_history(project_name: str) -> EditHistory:
@@ -232,6 +255,49 @@ async def create_project(project_info: ProjectInfo):
         return {"success": True, "message": f"Project '{project_info.project_name}' created successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Error creating project: {str(e)}")
+
+@app.post("/autocomplete")
+async def autocomplete(request: AutocompleteRequest):
+    print(f"Received autocomplete request: {request}")  
+    try:
+        # Create prompt for the model
+        prompt = f"""You are an AI writing assistant helping a user complete their current sentence.
+        USER INFORMATION:
+        {request.memory}
+
+        RECENT EDITING HISTORY:
+        {json.dumps(request.recent_edits, indent=2)}
+
+        PREVIOUS CONTEXT:
+        {request.previous_context}
+
+        TASK:
+        Complete ONLY the current sentence in a way that flows naturally from what has been written. 
+        Do not add any additional sentences, paragraphs, or explanations. 
+        Return ONLY the suggested text completion that would finish the current sentence.
+        """
+        
+        current_text = f"CURRENT TEXT (incomplete sentence, just continue on): {request.current_snippet}"
+
+        # Call the Llama model
+        response = client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": current_text}
+            ],
+            max_tokens=100,
+            temperature=0.7,
+        )
+        
+        # Extract completion
+        completion = response.choices[0].message.content.strip()
+        
+        return AutocompleteResponse(completion=completion)
+    
+    except Exception as e:
+        print(f"Error generating autocomplete: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating autocomplete: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

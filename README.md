@@ -88,6 +88,11 @@ For more detailed troubleshooting, see [DEVELOPMENT.md](DEVELOPMENT.md).
   - `components/`: React components
   - `types/`: TypeScript type definitions
 
+## Future Work
+
+- Login and authentication to save and load user stories + configurations
+- Safe storing api key and secrets (instead of .env file)
+
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.

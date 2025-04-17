@@ -7,7 +7,7 @@ load_dotenv()
 
 # Initialize OpenAI client
 try:
-    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"), base_url=os.getenv("OPENAI_BASE_URL"))
 except Exception as e:
     print(f"Error initializing OpenAI client: {e}")
     client = None
