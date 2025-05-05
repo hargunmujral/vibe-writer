@@ -12,19 +12,11 @@ from dotenv import load_dotenv
 
 from utils.edit_history import EditHistory
 from utils.config import load_config
-
+from utils.llm import request_llm
 app = FastAPI(title="Vibe Writer API", description="Backend API for Vibe Writer application")
 
 # Load environment variables
 load_dotenv()
-
-# Configure OpenAI client
-# Initialize OpenAI client
-try:
-    client = openai.OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-except Exception as e:
-    print(f"Error initializing OpenAI client: {e}")
-    client = None
 
 # Configure CORS
 app.add_middleware(
@@ -64,6 +56,10 @@ class AutocompleteRequest(BaseModel):
 class AutocompleteResponse(BaseModel):
     completion: str
 
+class MemoryRequest(BaseModel):
+    project_name: str
+    text_chunk: str
+    past_memory: List[str]
 # Helper functions
 def get_edit_history(project_name: str) -> EditHistory:
     return EditHistory(project_name)
@@ -280,24 +276,44 @@ async def autocomplete(request: AutocompleteRequest):
         current_text = f"CURRENT TEXT (incomplete sentence, just continue on): {request.current_snippet}"
 
         # Call the Llama model
-        response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": current_text}
-            ],
-            max_tokens=100,
-            temperature=0.7,
-        )
-        
-        # Extract completion
-        completion = response.choices[0].message.content.strip()
+        completion = request_llm(user_prompt=current_text, system_prompt=prompt, max_tokens=100, temperature=0.7, model="llama-3.3-70b-versatile")
         
         return AutocompleteResponse(completion=completion)
     
     except Exception as e:
         print(f"Error generating autocomplete: {str(e)}")
         raise HTTPException(status_code=500, detail=f"Error generating autocomplete: {str(e)}")
+
+@app.post("/memory/generate")
+async def generate_memory(request: MemoryRequest):
+    system_prompt = """
+    Read the following segment of a story. Create a brief memory (about 100 characters) 
+    that captures the most important information from this segment.
+    If nothing significant happened, respond with "NO MEMORY".
+        
+    Story segment:
+    """
+    try:
+        user_prompt = f"{request.text_chunk}\n\nMemory (keep under 100 characters):"
+        
+        memory = request_llm(
+            user_prompt=user_prompt, 
+            system_prompt=system_prompt, 
+            max_tokens=100, 
+            temperature=0.7, 
+            model="llama-3.3-70b-versatile"
+        )
+
+        # Strip and check if it's a "NO MEMORY" response
+        memory_text = memory.strip()
+        if memory_text.upper() == "NO MEMORY":
+            return {"generated": False, "memory": None}
+        return {"generated": True, "memory": memory_text}
+    
+    except Exception as e:
+        print(f"Error generating memory: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating memory: {str(e)}")
+    
 
 if __name__ == "__main__":
     import uvicorn
